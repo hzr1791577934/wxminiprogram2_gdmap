@@ -12,6 +12,9 @@
       <FormItem>
         <Button type="primary" @click="modal1 = true">新添视频</Button>
       </FormItem>
+      <FormItem>
+        <Button type="primary" @click="modal3 = true">编辑视频</Button>
+      </FormItem>
     </Form>
     <Table border :columns="columns7" :data="data6"></Table>
     <Page :total="total" :page-size="10" @on-change="changePage"></Page>
@@ -55,6 +58,29 @@
 
       </Form>
     </Modal>
+    <Modal
+      v-model="modal3"
+      title="编辑视频"
+      width="800"
+      scrollable="true"
+      ok-text="完成"
+      @on-ok="updatevideo('formItem2')"
+    >
+      <Form ref="formItem4" :model="formItem4" :rules="ruleItem4" :label-width="80">
+        <FormItem label="视频编号" prop="VideoID">
+          <Input v-model="formItem4.VideoID" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="视频名称" prop="NewsTitle">
+          <Input v-model="formItem4.VideoTitle" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="视频作者" prop="NewsAuthorName">
+          <Input v-model="formItem4.VideoAuthorName" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="视频类型" prop="ReadCount">
+          <Input v-model="formItem4.VideoType" placeholder=""></Input>
+        </FormItem>
+      </Form>
+    </Modal>
 
     <!--添加书籍副本-->
     <Modal
@@ -81,6 +107,7 @@
         condi: '',
         modal1: false,
         modal2: false,
+        modal3: false,
         content:'',
         currIndex: 0,//最近被点击添加编号副本的图书编号
         formInline: {
@@ -152,6 +179,34 @@
             message: '请填写书籍副本编号！',
             trigger: 'blur'
           }]
+        },
+        formItem4: {
+          VideoID:'',
+          VideoTitle: '',
+          VideoType: '',
+          VideoAuthorName: '',
+        },
+        ruleItem4: {
+          VideoID: [{
+            required: true,
+            message: '请填写编号！',
+            trigger: 'blur'
+          }],
+          VideoTitle: [{
+            // required: true,
+            message: '请填写视频名！',
+            trigger: 'blur'
+          }],
+          VideoType: [{
+            // required: true,
+            message: '请填写视频类型！',
+            trigger: 'blur'
+          }],
+          VideoAuthorName: [{
+            // required: true,
+            message: '请填写视频作者！',
+            trigger: 'blur'
+          }],
         },
         columns7: [
           {
@@ -259,8 +314,58 @@
           content: `视频编号：${this.data6[index].videoID}<br>视频名：${this.data6[index].videoTitle}<br>作者：${this.data6[index].videoAuthorName}<br>视频类型：${this.data6[index].videoType}<br>观看次数：${this.data6[index].viewCount}`
         })
       },
+      updatevideo (index) {
+        var that=this
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatevideo',
+          {
+            videoID: that.formItem4.VideoID,
+            videoTitle: that.formItem4.VideoTitle,
+            videoType: that.formItem4.VideoType,
+            videoAuthorName: that.formItem4.VideoAuthorName,
+          },
+          {
+            emulateJSON: true
+          }
+        ).then(function (res) {
+          console.log(res.data.status)
+          if(res.data.status=='ok'){
+            that.$Notice.config({
+              top: 50,
+              duration: 3,
+              title: '通知',
+              desc: '编辑新闻成功!'
+            })
+            that.request(1)
+          }
+
+        }).catch((e) => {
+          that.$Message.fail('网络有误！')
+        })
+      },
       remove (index) {
-        this.data6.splice(index, 1);
+        var that=this
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletevideo',
+          {
+            videoID: this.data6[index].videoID,
+          },
+          {
+            emulateJSON: true
+          }
+        ).then(function (res) {
+          console.log(res.data.status)
+          if(res.data.status=='ok'){
+            that.$Notice.config({
+              top: 50,
+              duration: 3,
+              title: '通知',
+              desc: '删除新闻成功!'
+            })
+            that.request(1)
+          }
+
+        }).catch((e) => {
+          that.$Message.fail('网络有误！')
+        })
       },
       request (currentPage){
         var that=this

@@ -12,6 +12,9 @@
       <FormItem>
         <Button type="primary" @click="modal1 = true">新添新闻</Button>
       </FormItem>
+      <FormItem>
+        <Button type="primary" @click="modal3 = true">编辑新闻</Button>
+      </FormItem>
     </Form>
     <Table border :columns="columns7" :data="data6"></Table>
     <Page :total="total" :page-size="10" @on-change="changePage"></Page>
@@ -52,6 +55,30 @@
       </Form>
     </Modal>
 
+    <Modal
+      v-model="modal3"
+      title="编辑新闻"
+      width="800"
+      scrollable="true"
+      ok-text="完成"
+      @on-ok="updatenews('formItem2')"
+    >
+      <Form ref="formItem4" :model="formItem4" :rules="ruleItem4" :label-width="80">
+        <FormItem label="新闻编号" prop="NewsID">
+          <Input v-model="formItem4.NewsID" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="新闻名称" prop="NewsTitle">
+          <Input v-model="formItem4.NewsTitle" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="新闻作者" prop="NewsAuthorName">
+          <Input v-model="formItem4.NewsAuthorName" placeholder=""></Input>
+        </FormItem>
+        <FormItem label="阅读次数" prop="ReadCount">
+          <Input v-model="formItem4.ReadCount" placeholder=""></Input>
+        </FormItem>
+      </Form>
+    </Modal>
+
     <!--添加书籍副本-->
     <Modal
       v-model="modal2"
@@ -77,6 +104,7 @@
         condi: '',
         modal1: false,
         modal2: false,
+        modal3: false,
         content:'',
         currIndex: 0,//最近被点击添加编号副本的图书编号
         formInline: {
@@ -136,6 +164,47 @@
             trigger: 'blur'
           }]
         },
+        formItem4: {
+          NewsID:'',
+          NewsTitle: '',
+          NewsAuthorName: '',
+          ReadCount: '',
+        },
+        ruleItem4: {
+          NewsID: [{
+            required: true,
+            message: '请填写编号！',
+            trigger: 'blur'
+          }],
+          NewsTitle: [{
+            // required: true,
+            message: '请填写新闻名！',
+            trigger: 'blur'
+          }],
+          NewsAuthorName: [{
+            // required: true,
+            message: '请填写新闻作者！',
+            trigger: 'blur'
+          }],
+          // NewsImage: [{
+          //   // required: true,
+          //   message: '请填写图片链接！',
+          //   trigger: 'blur'
+          // }],
+          // NewsAuthorImage: [{
+          //   // required: true,
+          //   message: '请填写作者图片链接！'
+          // }],
+          ReadCount: [{
+            // required: true,
+            message: '请填写阅读次数！'
+          }],
+          // NewsContent: [{
+          //   // required: true,
+          //   message: '请填新闻内容！',
+          //   trigger: 'blur'
+          // }]
+        },
         columns7: [
           {
             title: '编号',
@@ -192,11 +261,13 @@
                   },
                   on: {
                     click: () => {
-                      this.modal2=true
-                      this.currIndex = this.data6[params.index].aid
+                      // this.modal2=true
+                      // this.currIndex = this.data6[params.index].aid
+                      this.update(params.index)
                     }
                   }
-                }, '添加编号副本'),
+                  //update 待定按钮
+                }, '更新'),
                 h('Button', {
                   props: {
                     type: 'error',
@@ -230,9 +301,65 @@
           content: `新闻编号：${this.data6[index].newsID}<br>新闻名：${this.data6[index].newsTitle}<br>新闻作者：${this.data6[index].newsAuthorName}<br>阅读次数：${this.data6[index].readCount}<br>新闻图片：${this.data6[index].newsImage}<br>新闻内容：${this.data6[index].newsContent}`
         })
       },
-      remove (index) {
-        this.data6.splice(index, 1);
+      updatenews (index) {
+        var that=this
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatenews',
+          {
+            newsID: that.formItem4.NewsID,
+            newsTitle: that.formItem4.NewsTitle,
+            newsAuthorName: that.formItem4.NewsAuthorName,
+            readCount: that.formItem4.ReadCount
+          },
+          {
+            emulateJSON: true
+          }
+        ).then(function (res) {
+          console.log(res.data.status)
+          if(res.data.status=='ok'){
+            that.$Notice.config({
+              top: 50,
+              duration: 3,
+              title: '通知',
+              desc: '编辑新闻成功!'
+            })
+            that.formInline.account=''
+            that.formItem4.NewsID=''
+            that.formItem4.NewsTitle=''
+            that.formItem4.NewsAuthorName=''
+            that.formItem4.ReadCount=''
+            that.request(1)
+          }
+
+        }).catch((e) => {
+          that.$Message.fail('网络有误！')
+        })
       },
+      remove (index) {
+        var that=this
+            that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletenews',
+              {
+                newsID: this.data6[index].newsID,
+              },
+              {
+                emulateJSON: true
+              }
+            ).then(function (res) {
+              console.log(res.data.status)
+              if(res.data.status=='ok'){
+                that.$Notice.config({
+                  top: 50,
+                  duration: 3,
+                  title: '通知',
+                  desc: '更新新闻成功!'
+                })
+
+                that.request(1)
+              }
+
+            }).catch((e) => {
+              that.$Message.fail('网络有误！')
+            })
+          },
       request (currentPage){
         var that=this
         this.$http.post(that.GLOBAL.serverPath + '/superadmin/getAllNews',
@@ -267,7 +394,6 @@
         var that=this
         this.$refs[name].validate((valid) => {
           if (valid) {
-            //没有编写的接口addnews()
             that.$http.post(that.GLOBAL.serverPath + '/superadmin/addnews',
               {
                 newsID: that.formItem2.NewsID,
