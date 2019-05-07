@@ -9,7 +9,7 @@
       <Row>
         <Col :xs="23" :sm="23" :md="23" :lg="23">
         <FormItem prop="account" label="账号">
-          <Input type="text" v-model="formItem.account" placeholder="你的注册邮箱"></Input>
+          <Input type="number" v-model="formItem.account" placeholder="你的注册邮箱"></Input>
         </FormItem>
         </Col>
       </Row>
@@ -21,16 +21,6 @@
         </Col>
       </Row>
       <Row>
-        <Col :xs="16" :sm="16" :md="16" :lg="16">
-          <FormItem prop="code" label="验证码">
-             <Input type="text" v-model="formItem.code" placeholder="请输入验证码"></Input>
-          </FormItem>
-        </Col>
-        <Col :xs="8" :sm="8" :md="8" :lg="8">
-          <h2 id="verifyCode" @click="createCode()">{{verifyCode}}</h2>
-        </Col>
-      </Row>
-      <Row>
         <Col :xs="24" :sm="24" :md="24" :lg="24">
         <Button id="login_btn" shape="circle" type="primary" :loading="loading" @click.native="handleSubmit('formItem')">
           <span v-if="!loading">登录</span>
@@ -39,9 +29,6 @@
         </Col>
       </Row>
       <Row class="tip">
-        <Col :xs="10" :sm="10" :md="10" :lg="10" offset="12">
-          <!--<span class="login_font">忘记密码？点击邮箱找回</span>-->
-        </Col>
       </Row>
     </Form>
   </div>
@@ -56,8 +43,8 @@ export default {
       verifyCode: 'hello',
       formItem: {
         account: '',
-        password: '',
-        code: ''
+        password: ''
+        // code: ''
       },
       ruleItem: {
         account: [{
@@ -74,11 +61,6 @@ export default {
           min: 3,
           message: '密码长度不能小于6位',
           trigger: 'blur'
-        }],
-        code: [{
-          required: true,
-          message: '请填写验证码',
-          trigger: 'blur'
         }]
       },
       loading: false
@@ -93,24 +75,19 @@ export default {
       this.loading = true
       this.$refs[name].validate((valid) => {
         if (valid) {
-          if (that.verifyCode === that.formItem.code) {
-            that.$http.post(that.GLOBAL.serverPath + '/excise/login',
-              {
-                account: that.formItem.account,
-                password: that.formItem.password
-              },
-              {
-                emulateJSON: true
-              }
+          // if (that.verifyCode === that.formItem.code) {
+          that.$http.post(that.GLOBAL.serverPath + '/superadmin/login',
+            {
+              account: that.formItem.account,
+              password: that.formItem.password
+            },
+            {
+              emulateJSON: true
+            }
             ).then(function (res) {
               console.log(res.data.loginUser)
               if (res.data.result === 'yes') {
                 this.$Message.success('登录成功!')
-                window.localStorage.setItem('userId', res.data.loginUser.rid)
-                window.localStorage.setItem('account', res.data.loginUser.account)
-                window.localStorage.setItem('username', res.data.loginUser.name)
-                window.localStorage.setItem('sex', res.data.loginUser.sex)
-                window.localStorage.setItem('condi', res.data.loginUser.condi)
                 console.log('hahaha' + res.data.condi)
                 if (res.data.condi === 2) {
                   this.$router.replace({path: '/index'})
@@ -124,25 +101,14 @@ export default {
                 this.loading = false
               }
             })
-          } else {
-            that.$Message.error('请填写正确的验证码!')
-            this.loading = false
-          }
+          // } else {
+          //   that.$Message.error('请填写正确的验证码!')
+          //   this.loading = false
+          // }
         } else {
           this.loading = false
         }
       })
-    },
-    createCode () {
-      var code = ''
-      var codeLength = 4
-      var random = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-      for (var i = 0; i < codeLength; i++) {
-        var index = Math.floor(Math.random() * 36)
-        code += random[index]
-      }
-      console.log(code)
-      this.verifyCode = code
     }
   }
 }
@@ -170,7 +136,5 @@ export default {
   .tip{
     margin-top:10px;
     color:darkgrey;
-  }
-  #verifyCode{
   }
 </style>

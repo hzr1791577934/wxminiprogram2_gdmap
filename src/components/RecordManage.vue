@@ -268,21 +268,6 @@
                 }, '查看'),
                 h('Button', {
                   props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.modal2=true
-                      this.currIndex = this.data6[params.index].aid
-                    }
-                  }
-                }, '添加编号副本'),
-                h('Button', {
-                  props: {
                     type: 'error',
                     size: 'small'
                   },

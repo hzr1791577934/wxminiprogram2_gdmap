@@ -186,24 +186,10 @@
             message: '请填写新闻作者！',
             trigger: 'blur'
           }],
-          // NewsImage: [{
-          //   // required: true,
-          //   message: '请填写图片链接！',
-          //   trigger: 'blur'
-          // }],
-          // NewsAuthorImage: [{
-          //   // required: true,
-          //   message: '请填写作者图片链接！'
-          // }],
           ReadCount: [{
             // required: true,
             message: '请填写阅读次数！'
           }],
-          // NewsContent: [{
-          //   // required: true,
-          //   message: '请填新闻内容！',
-          //   trigger: 'blur'
-          // }]
         },
         columns7: [
           {
@@ -251,23 +237,6 @@
                     }
                   }
                 }, '查看'),
-                h('Button', {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      // this.modal2=true
-                      // this.currIndex = this.data6[params.index].aid
-                      this.update(params.index)
-                    }
-                  }
-                  //update 待定按钮
-                }, '更新'),
                 h('Button', {
                   props: {
                     type: 'error',
