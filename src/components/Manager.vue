@@ -4,15 +4,15 @@
       <Col span="5" class="layout-menu-left">
       <Menu active-name="1-1" theme="dark" width="auto" :open-names="['1']">
         <div class="layout-logo-left">
-          <h2 style="color:white;">无人机视界</h2>
+          <h2 style="color:white;">iMap</h2>
         </div>
         <Submenu name="1">
           <template slot="title">
             <Icon type="ios-navigate"></Icon>
             欢迎你，管理员:{{msg}}
           </template>
-          <MenuItem name="1-1" @click.native="lookBook"><span>新闻管理</span></MenuItem>
-          <MenuItem name="1-2" @click.native="lookRecord"><span>视频管理</span></MenuItem>
+          <MenuItem name="1-1" @click.native="lookBook"><span>收藏管理</span></MenuItem>
+          <MenuItem name="1-2" @click.native="lookRecord"><span>历史轨迹管理</span></MenuItem>
         </Submenu>
       </Menu>
       </Col>
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="layout-copy">
-        2018-2019 &copy; 无人机视界管理
+        2018-2019 &copy; iMap管理
       </div>
       </Col>
     </Row>
@@ -61,13 +61,13 @@
       lookBook () {
         this.one_nav = '主页'
         this.two_nav = '后台管理'
-        this.three_nav = '新闻管理'
+        this.three_nav = '收藏管理'
         this.currentView = 'bookManage'
       },
       lookRecord () {
         this.one_nav = '主页'
         this.two_nav = '后台管理'
-        this.three_nav = '视频管理'
+        this.three_nav = '历史轨迹管理'
         this.currentView = 'recordManage'
       }
     },

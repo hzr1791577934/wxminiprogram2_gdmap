@@ -206,7 +206,7 @@
                 that.formInline.account=''
                 that.request(1)
               }else{
-                that.$Message.error('已存在该学号的用户')
+                that.$Message.error('已存在该账号的用户')
               }
 
             }).catch((e) => {

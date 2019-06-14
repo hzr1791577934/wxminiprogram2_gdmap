@@ -9,7 +9,7 @@
       <Row>
         <Col :xs="23" :sm="23" :md="23" :lg="23">
         <FormItem prop="account" label="账号">
-          <Input type="number" v-model="formItem.account" placeholder="你的注册邮箱"></Input>
+          <Input type="number" v-model="formItem.account" placeholder="你的用户名"></Input>
         </FormItem>
         </Col>
       </Row>
@@ -39,7 +39,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      msg: '图书馆',
+      msg: '无人机管理',
       verifyCode: 'hello',
       formItem: {
         account: '',

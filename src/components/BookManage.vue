@@ -2,7 +2,7 @@
   <div class="container">
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
       <FormItem prop="account">
-        <Input type="text" v-model="formInline.NewsTitle" placeholder="新闻名称">
+        <Input type="text" v-model="formInline.id" placeholder="收藏名称">
         <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
@@ -10,10 +10,10 @@
         <Button type="primary" @click="handleSubmit('formInline')">查找</Button>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="modal1 = true">新添新闻</Button>
+        <Button type="primary" @click="modal1 = true">新添收藏</Button>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="modal3 = true">编辑新闻</Button>
+        <Button type="primary" @click="modal3 = true">编辑收藏</Button>
       </FormItem>
     </Form>
     <Table border :columns="columns7" :data="data6"></Table>
@@ -21,60 +21,46 @@
 
     <Modal
       v-model="modal1"
-      title="新添新闻"
+      title="新添收藏"
       width="800"
       scrollable="true"
       ok-text="添加"
       @on-ok="ok('formItem2')"
     >
       <Form ref="formItem2" :model="formItem2" :rules="ruleItem2" :label-width="80">
-        <FormItem label="新闻图片" prop="NewsImage">
-          <Input v-model="formItem2.NewsImage" placeholder=""></Input>
+        <FormItem label="经度" prop="clan">
+          <Input v-model="formItem2.clan" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻编号" prop="NewsID">
-          <Input v-model="formItem2.NewsID" placeholder=""></Input>
+        <FormItem label="纬度" prop="clat">
+          <Input v-model="formItem2.clat" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻名称" prop="NewsTitle">
-          <Input v-model="formItem2.NewsTitle" placeholder=""></Input>
+        <FormItem label="地址名" prop="cplace">
+          <Input v-model="formItem2.cplace" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻作者" prop="NewsAuthorName">
-          <Input v-model="formItem2.NewsAuthorName" placeholder=""></Input>
+        <FormItem label="具体地址" prop="cdescr">
+          <Input v-model="formItem2.cdescr" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻作者图片链接" prop="NewsAuthorImage">
-          <Input v-model="formItem2.NewsAuthorImage" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="阅读次数" prop="ReadCount">
-          <Input v-model="formItem2.ReadCount" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="新闻内容" prop="NewsContent">
-          <quill-editor v-model="formItem2.NewsContent" ref="VueQuillEditor"
-                        :content="content"
-                        @change="onEditorChange($event)">
-          </quill-editor>
-        </FormItem>
+
       </Form>
     </Modal>
 
     <Modal
       v-model="modal3"
-      title="编辑新闻"
+      title="编辑收藏"
       width="800"
       scrollable="true"
       ok-text="完成"
       @on-ok="updatenews('formItem2')"
     >
       <Form ref="formItem4" :model="formItem4" :rules="ruleItem4" :label-width="80">
-        <FormItem label="新闻编号" prop="NewsID">
-          <Input v-model="formItem4.NewsID" placeholder=""></Input>
+        <FormItem label="轨迹编号" prop="id">
+          <Input v-model="formItem4.id" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻名称" prop="NewsTitle">
-          <Input v-model="formItem4.NewsTitle" placeholder=""></Input>
+        <FormItem label="地址名" prop="cplace">
+          <Input v-model="formItem4.cplace" placeholder=""></Input>
         </FormItem>
-        <FormItem label="新闻作者" prop="NewsAuthorName">
-          <Input v-model="formItem4.NewsAuthorName" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="阅读次数" prop="ReadCount">
-          <Input v-model="formItem4.ReadCount" placeholder=""></Input>
+        <FormItem label="具体地址" prop="cdescr">
+          <Input v-model="formItem4.cdescr" placeholder=""></Input>
         </FormItem>
       </Form>
     </Modal>
@@ -108,51 +94,33 @@
         content:'',
         currIndex: 0,//最近被点击添加编号副本的图书编号
         formInline: {
-          NewsTitle: ''
+          id: ''
         },
         formItem2: {
-          NewsImage:'',
-          NewsID:'',
-          NewsTitle: '',
-          NewsContent:'',
-          ReadCount: '',
-          NewsAuthorName: '',
-          NewsAuthorImage: '',
+          clan:'',
+          clat: '',
+          place: '',
+          descr: '',
         },
         ruleItem2: {
-          NewsID: [{
+          clan: [{
             required: true,
-            message: '请填写编号！',
+            message: '请填写地址经度！',
             trigger: 'blur'
           }],
-          NewsTitle: [{
+          clat: [{
             required: true,
-            message: '请填写新闻名！',
+            message: '请填写地址纬度！'
+          }],
+          cplace: [{
+            required: true,
+            message: '请填写地址名！',
             trigger: 'blur'
           }],
-          NewsAuthorName: [{
+          cdescr: [{
             required: true,
-            message: '请填写新闻作者！',
-            trigger: 'blur'
+            message: '请填写具体地址！'
           }],
-          NewsImage: [{
-            required: true,
-            message: '请填写图片链接！',
-            trigger: 'blur'
-          }],
-          NewsAuthorImage: [{
-            required: true,
-            message: '请填写作者图片链接！'
-          }],
-          ReadCount: [{
-            required: true,
-            message: '请填写阅读次数！'
-          }],
-          NewsContent: [{
-            required: true,
-            message: '请填新闻内容！',
-            trigger: 'blur'
-          }]
         },
         formItem3: {
           num: ''
@@ -165,56 +133,47 @@
           }]
         },
         formItem4: {
-          NewsID:'',
-          NewsTitle: '',
-          NewsAuthorName: '',
-          ReadCount: '',
+          id:'',
+          cplace: '',
+          cdescr: '',
         },
         ruleItem4: {
-          NewsID: [{
+          id: [{
             required: true,
-            message: '请填写编号！',
+            message: '请填写轨迹编号！',
             trigger: 'blur'
           }],
-          NewsTitle: [{
+          cplace: [{
             // required: true,
-            message: '请填写新闻名！',
+            message: '请填写地址名！',
             trigger: 'blur'
           }],
-          NewsAuthorName: [{
+          cdescr: [{
             // required: true,
-            message: '请填写新闻作者！',
+            message: '请填写具体地址！',
             trigger: 'blur'
-          }],
-          ReadCount: [{
-            // required: true,
-            message: '请填写阅读次数！'
           }],
         },
         columns7: [
           {
             title: '编号',
-            key: 'newsID',
+            key: 'id',
           },
           {
-            title: '新闻名',
-            key: 'newsTitle'
+            title: '经度',
+            key: 'clan'
           },
           {
-            title: '新闻图片',
-            key: 'newsImage'
+            title: '纬度',
+            key: 'clat'
           },
           {
-            title: '作者',
-            key: 'newsAuthorName'
+            title: '地址名',
+            key: 'cplace'
           },
           {
-            title: '作者链接',
-            key: 'newsAuthorImage'
-          },
-          {
-            title: '阅读次数',
-            key: 'readCount'
+            title: '具体地址',
+            key: 'cdescr'
           },
           {
             title: '操作',
@@ -265,19 +224,20 @@
       },
       show (index) {
         this.$Modal.info({
-          title: '新闻信息',
-          width: '1100',
-          content: `新闻编号：${this.data6[index].newsID}<br>新闻名：${this.data6[index].newsTitle}<br>新闻作者：${this.data6[index].newsAuthorName}<br>阅读次数：${this.data6[index].readCount}<br>新闻图片：${this.data6[index].newsImage}<br>新闻内容：${this.data6[index].newsContent}`
+          title: '收藏信息',
+          width: '600',
+          content: `收藏编号：${this.data6[index].id}<br>经度：${this.data6[index].clan}<br>
+                    纬度：${this.data6[index].clat}<br>地址名：${this.data6[index].cplace}<br>具体地址：${this.data6[index].cdescr}}`
         })
       },
       updatenews (index) {
         var that=this
-        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatenews',
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatecollection',
           {
-            newsID: that.formItem4.NewsID,
-            newsTitle: that.formItem4.NewsTitle,
-            newsAuthorName: that.formItem4.NewsAuthorName,
-            readCount: that.formItem4.ReadCount
+            id: that.formItem4.id,
+            cplace: that.formItem4.cplace,
+            cdescr: that.formItem4.cdescr,
+            // readCount: that.formItem4.ReadCount
           },
           {
             emulateJSON: true
@@ -289,13 +249,11 @@
               top: 50,
               duration: 3,
               title: '通知',
-              desc: '编辑新闻成功!'
+              desc: '编辑轨迹成功!'
             })
-            that.formInline.account=''
-            that.formItem4.NewsID=''
-            that.formItem4.NewsTitle=''
-            that.formItem4.NewsAuthorName=''
-            that.formItem4.ReadCount=''
+            that.formInline.id=''
+            that.formItem4.cplace=''
+            that.formItem4.cdescr=''
             that.request(1)
           }
 
@@ -305,9 +263,9 @@
       },
       remove (index) {
         var that=this
-            that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletenews',
+            that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletecollection',
               {
-                newsID: this.data6[index].newsID,
+                id: this.data6[index].id,
               },
               {
                 emulateJSON: true
@@ -319,7 +277,7 @@
                   top: 50,
                   duration: 3,
                   title: '通知',
-                  desc: '更新新闻成功!'
+                  desc: '更新轨迹成功!'
                 })
 
                 that.request(1)
@@ -331,9 +289,9 @@
           },
       request (currentPage){
         var that=this
-        this.$http.post(that.GLOBAL.serverPath + '/superadmin/getAllNews',
+        this.$http.post(that.GLOBAL.serverPath + '/superadmin/webgetallcollection',
           {
-            title: that.formInline.NewsTitle,
+            id: that.formInline.id,
             currentPage: currentPage
           },
           {
@@ -363,15 +321,12 @@
         var that=this
         this.$refs[name].validate((valid) => {
           if (valid) {
-            that.$http.post(that.GLOBAL.serverPath + '/superadmin/addnews',
+            that.$http.post(that.GLOBAL.serverPath + '/superadmin/addcollection',
               {
-                newsID: that.formItem2.NewsID,
-                newsTitle: that.formItem2.NewsTitle,
-                newsImage: that.formItem2.NewsImage,
-                newsContent: that.formItem2.NewsContent,
-                readCount: that.formItem2.ReadCount,
-                newsAuthorName: that.formItem2.NewsAuthorName,
-                newsAuthorImage: that.formItem2.NewsAuthorImage
+                clan: that.formItem2.clan,
+                clat: that.formItem2.clat,
+                cplace: that.formItem2.cplace,
+                cdescr: that.formItem2.cdescr
               },
               {
                 emulateJSON: true
@@ -379,21 +334,16 @@
             ).then(function (res) {
               console.log(res.data.status)
               if(res.data.status=='ok'){
-                //that.$Message.success('新增成功')
                 that.$Notice.config({
                   top: 50,
                   duration: 3,
                   title: '通知',
                   desc: '新添新闻成功!'
                 })
-                that.formInline.account=''
-                that.formItem2.NewsID=''
-                that.formItem2.NewsTitle=''
-                that.formItem2.NewsContent=''
-                that.formItem2.NewsImage=''
-                that.formItem2.NewsAuthorImage=''
-                that.formItem2.NewsAuthorName=''
-                that.formItem2.ReadCount=''
+                that.formInline.clan=''
+                that.formItem2.clat=''
+                that.formItem2.cplace=''
+                that.formItem2.cdescr=''
                 that.request(1)
               }
 

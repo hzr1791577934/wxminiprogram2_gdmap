@@ -2,7 +2,7 @@
   <div class="container">
     <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
       <FormItem prop="account">
-        <Input type="text" v-model="formInline.NewsTitle" placeholder="视频名称">
+        <Input type="text" v-model="formInline.id" placeholder="轨迹名称">
           <Icon type="ios-person-outline" slot="prepend"></Icon>
         </Input>
       </FormItem>
@@ -10,10 +10,10 @@
         <Button type="primary" @click="handleSubmit('formInline')">查找</Button>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="modal1 = true">新添视频</Button>
+        <Button type="primary" @click="modal1 = true">新添轨迹点</Button>
       </FormItem>
       <FormItem>
-        <Button type="primary" @click="modal3 = true">编辑视频</Button>
+        <Button type="primary" @click="modal3 = true">编辑轨迹点</Button>
       </FormItem>
     </Form>
     <Table border :columns="columns7" :data="data6"></Table>
@@ -21,64 +21,49 @@
 
     <Modal
       v-model="modal1"
-      title="新添视频"
+      title="新添轨迹点"
       width="800"
       scrollable="true"
       ok-text="添加"
       @on-ok="ok('formItem2')"
     >
       <Form ref="formItem2" :model="formItem2" :rules="ruleItem2" :label-width="80">
-        <FormItem label="视频编号" prop="VideoID">
-          <Input v-model="formItem2.VideoID" placeholder=""></Input>
+        <FormItem label="经度" prop="longitude">
+          <Input v-model="formItem2.longitude" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频链接" prop="VideoLink">
-          <Input v-model="formItem2.VideoLink" placeholder=""></Input>
+        <FormItem label="纬度" prop="latitude">
+          <Input v-model="formItem2.latitude" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频名称" prop="VideoTitle">
-          <Input v-model="formItem2.VideoTitle" placeholder=""></Input>
+        <FormItem label="地址名" prop="place">
+          <Input v-model="formItem2.place" placeholder=""></Input>
         </FormItem>
-        <FormItem label="作者" prop="VideoAuthorName">
-          <Input v-model="formItem2.VideoAuthorName" placeholder=""></Input>
+        <FormItem label="具体地址" prop="descr">
+          <Input v-model="formItem2.descr" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频类型" prop="VideoType">
-          <Input v-model="formItem2.VideoType" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="观看次数" prop="ViewCount">
-          <Input v-model="formItem2.ViewCount" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="收藏次数" prop="VideoLike">
-          <Input v-model="formItem2.VideoLike" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="评论次数" prop="VideoComments">
-          <Input v-model="formItem2.VideoComments" placeholder=""></Input>
-        </FormItem>
-        <FormItem label="作者链接" prop="VideoAuthorImage">
-          <Input v-model="formItem2.VideoAuthorImage" placeholder=""></Input>
-        </FormItem>
-
       </Form>
     </Modal>
+
     <Modal
       v-model="modal3"
-      title="编辑视频"
+      title="编辑轨迹"
       width="800"
       scrollable="true"
       ok-text="完成"
-      @on-ok="updatevideo('formItem2')"
+      @on-ok="updatenews('formItem2')"
     >
       <Form ref="formItem4" :model="formItem4" :rules="ruleItem4" :label-width="80">
-        <FormItem label="视频编号" prop="VideoID">
-          <Input v-model="formItem4.VideoID" placeholder=""></Input>
+        <FormItem label="轨迹编号" prop="id">
+          <Input v-model="formItem4.id" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频名称" prop="NewsTitle">
-          <Input v-model="formItem4.VideoTitle" placeholder=""></Input>
+        <FormItem label="地址名" prop="place">
+          <Input v-model="formItem4.place" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频作者" prop="NewsAuthorName">
-          <Input v-model="formItem4.VideoAuthorName" placeholder=""></Input>
+        <FormItem label="具体地址" prop="descr">
+          <Input v-model="formItem4.descr" placeholder=""></Input>
         </FormItem>
-        <FormItem label="视频类型" prop="ReadCount">
-          <Input v-model="formItem4.VideoType" placeholder=""></Input>
-        </FormItem>
+        <!--        <FormItem label="阅读次数" prop="ReadCount">-->
+        <!--          <Input v-model="formItem4.ReadCount" placeholder=""></Input>-->
+        <!--        </FormItem>-->
       </Form>
     </Modal>
 
@@ -111,64 +96,57 @@
         content:'',
         currIndex: 0,//最近被点击添加编号副本的图书编号
         formInline: {
-          VideoTitle: ''
+          id: ''
         },
         formItem2: {
-          VideoID:'',
-          VideoLink:'',
-          VideoTitle: '',
-          VideoAuthorName:'',
-          VideoType: '',
-          ViewCount: '',
-          VideoLike: '',
-          VideoComments: '',
-          VideoAuthorImage: '',
+          // id:'',
+          // userAccount:'',
+          // ttime: '',
+          longitude:'',
+          latitude: '',
+          place: '',
+          descr: '',
+          // tttime:''
         },
         ruleItem2: {
-          VideoID: [{
+          // id: [{
+          //   required: true,
+          //   message: '请填写编号！',
+          //   trigger: 'blur'
+          // }],
+          // userAccount: [{
+          //   required: true,
+          //   message: '请填写用户名！',
+          //   trigger: 'blur'
+          // }],
+          // ttime: [{
+          //   required: true,
+          //   message: '请填写时间（年月日）！',
+          //   trigger: 'blur'
+          // }],
+          longitude: [{
             required: true,
-            message: '请填写编号！',
+            message: '请填写地址经度！',
             trigger: 'blur'
           }],
-          VideoLink: [{
+          latitude: [{
             required: true,
-            message: '请填写视频链接！',
+            message: '请填写地址纬度！'
+          }],
+          place: [{
+            required: true,
+            message: '请填写地址名！',
             trigger: 'blur'
           }],
-          VideoTitle: [{
+          descr: [{
             required: true,
-            message: '请填写视频名！',
-            trigger: 'blur'
+            message: '请填写具体地址！'
           }],
-          VideoAuthorName: [{
-            required: true,
-            message: '请填视频作者！',
-            trigger: 'blur'
-          }],
-          VideoType: [{
-            required: true,
-            message: '请填写视频类型！',
-            trigger: 'blur'
-          }],
-          ViewCount: [{
-            required: true,
-            message: '请填写观看次数！'
-          }],
-          VideoLike: [{
-            required: true,
-            message: '请填写收藏次数！'
-          }],
-          VideoComments: [{
-            required: true,
-            message: '请填写评论数！',
-            trigger: 'blur'
-          }],
-          VideoAuthorImage: [{
-            required: true,
-            message: '请填写作者图片链接！',
-            trigger: 'blur'
-          }]
-
+          // tttime: [{
+          //   required: true,
+          //   message: '请填写时间（）！'
+          // }]
+          //
         },
         formItem3: {
           num: ''
@@ -181,69 +159,64 @@
           }]
         },
         formItem4: {
-          VideoID:'',
-          VideoTitle: '',
-          VideoType: '',
-          VideoAuthorName: '',
+          id:'',
+          place: '',
+          descr: '',
+          // ReadCount: '',
         },
         ruleItem4: {
-          VideoID: [{
+          id: [{
             required: true,
-            message: '请填写编号！',
+            message: '请填写轨迹编号！',
             trigger: 'blur'
           }],
-          VideoTitle: [{
+          place: [{
             // required: true,
-            message: '请填写视频名！',
+            message: '请填写地址名！',
             trigger: 'blur'
           }],
-          VideoType: [{
+          descr: [{
             // required: true,
-            message: '请填写视频类型！',
+            message: '请填写具体地址！',
             trigger: 'blur'
           }],
-          VideoAuthorName: [{
-            // required: true,
-            message: '请填写视频作者！',
-            trigger: 'blur'
-          }],
+          // ReadCount: [{
+          //   // required: true,
+          //   message: '请填写阅读次数！'
+          // }],
         },
         columns7: [
           {
             title: '编号',
-            key: 'videoID',
+            key: 'id',
           },
           {
-            title: '视频名',
-            key: 'videoTitle'
+            title: '用户账号',
+            key: 'userAccount'
           },
           {
-            title: '视频类型',
-            key: 'videoType'
-          },
-          // {
-          //   title: '视频链接',
-          //   key: 'videoLink'
-          // },
-          {
-            title: '作者',
-            key: 'videoAuthorName'
+            title: '经度',
+            key: 'longitude'
           },
           {
-            title: '作者链接',
-            key: 'videoAuthorImage'
+            title: '纬度',
+            key: 'latitude'
           },
           {
-            title: '观看次数',
-            key: 'viewCount'
+            title: '地址名',
+            key: 'place'
           },
           {
-            title: '收藏次数',
-            key: 'videoLike'
+            title: '具体地址',
+            key: 'descr'
           },
           {
-            title: '评论次数',
-            key: 'videoComments'
+            title: '年月日',
+            key: 'ttime'
+          },
+          {
+            title: '时分秒',
+            key: 'tttime'
           },
           {
             title: '操作',
@@ -293,20 +266,23 @@
         this.request(1)
       },
       show (index) {
+        // this.$router.push({ path:'/map.html'  })
         this.$Modal.info({
-          title: '视频信息',
-          width: '1100',
-          content: `视频编号：${this.data6[index].videoID}<br>视频名：${this.data6[index].videoTitle}<br>作者：${this.data6[index].videoAuthorName}<br>视频类型：${this.data6[index].videoType}<br>观看次数：${this.data6[index].viewCount}`
+          title: '轨迹信息',
+          width: '600',
+          content: `轨迹编号：${this.data6[index].id}<br>用户账号：${this.data6[index].userAccount}<br>经度：${this.data6[index].longitude}<br>
+                    纬度：${this.data6[index].latitude}<br>地址名：${this.data6[index].place}<br>具体地址：${this.data6[index].descr}<br>
+                    年月日：${this.data6[index].ttime}<br>时分秒：${this.data6[index].tttime}`
         })
       },
-      updatevideo (index) {
+      updatenews (index) {
         var that=this
-        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatevideo',
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/updatefootprint',
           {
-            videoID: that.formItem4.VideoID,
-            videoTitle: that.formItem4.VideoTitle,
-            videoType: that.formItem4.VideoType,
-            videoAuthorName: that.formItem4.VideoAuthorName,
+            id: that.formItem4.id,
+            place: that.formItem4.place,
+            descr: that.formItem4.descr,
+            // readCount: that.formItem4.ReadCount
           },
           {
             emulateJSON: true
@@ -318,8 +294,13 @@
               top: 50,
               duration: 3,
               title: '通知',
-              desc: '编辑新闻成功!'
+              desc: '编辑轨迹成功!'
             })
+            that.formInline.id=''
+            that.formItem4.place=''
+            that.formItem4.descr=''
+            // that.formItem4.NewsAuthorName=''
+            // that.formItem4.ReadCount=''
             that.request(1)
           }
 
@@ -329,9 +310,9 @@
       },
       remove (index) {
         var that=this
-        that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletevideo',
+        that.$http.post(that.GLOBAL.serverPath + '/superadmin/deletefootprint',
           {
-            videoID: this.data6[index].videoID,
+            id: this.data6[index].id,
           },
           {
             emulateJSON: true
@@ -343,8 +324,9 @@
               top: 50,
               duration: 3,
               title: '通知',
-              desc: '删除新闻成功!'
+              desc: '更新轨迹成功!'
             })
+
             that.request(1)
           }
 
@@ -354,9 +336,9 @@
       },
       request (currentPage){
         var that=this
-        this.$http.post(that.GLOBAL.serverPath + '/superadmin/getAllVideo',
+        this.$http.post(that.GLOBAL.serverPath + '/superadmin/webgetallfootprint',
           {
-            title: that.formInline.VideoTitle,
+            id: that.formInline.id,
             currentPage: currentPage
           },
           {
@@ -365,18 +347,19 @@
         ).then(function (res) {
           that.total=res.data.pageInfo.total
           that.data6=[]
-          that.data7=res.data.video
+          that.data7=res.data.news
           that.data7.forEach((e) => {
             let obj={}
             obj = e
-            console.log(obj)
             var count=1
             var s=''
             obj.count = count
             obj.suba = s
             that.data6.push(obj)
+            // console.log('data6',that.data6)
           })
         })
+        // this.reload()
       },
       changePage: function(page){
         this.request(page)
@@ -385,46 +368,29 @@
         var that=this
         this.$refs[name].validate((valid) => {
           if (valid) {
-            //没有编写的接口addvideo()
-            console.log('videoid:',that.formItem2.VideoID)
-            that.$http.post(that.GLOBAL.serverPath + '/superadmin/addvideo',
+            that.$http.post(that.GLOBAL.serverPath + '/superadmin/addfootprint',
               {
-                videoID: that.formItem2.VideoID,
-                videoLink: that.formItem2.VideoLink,
-                videoTitle: that.formItem2.VideoTitle,
-                videoAuthorName: that.formItem2.VideoAuthorName,
-                videoType: that.formItem2.VideoType,
-                viewCount: that.formItem2.ViewCount,
-                videoLike: that.formItem2.VideoLike,
-                videoComments: that.formItem2.VideoComments,
-                videoAuthorImage: that.formItem2.VideoAuthorImage,
-
+                longitude: that.formItem2.longitude,
+                latitude: that.formItem2.latitude,
+                place: that.formItem2.place,
+                descr: that.formItem2.descr
               },
               {
                 emulateJSON: true
               }
             ).then(function (res) {
-
-              console.log('status:',res.data.status)
-
+              console.log(res.data.status)
               if(res.data.status=='ok'){
-                that.$Message.success('新增成功')
                 that.$Notice.config({
                   top: 50,
                   duration: 3,
                   title: '通知',
-                  desc: '新添视频成功!'
+                  desc: '新添新闻成功!'
                 })
-                that.formInline.account=''
-                that.formItem2.VideoID=''
-                that.formItem2.VideoTitle=''
-                that.formItem2.VideoLike=''
-                that.formItem2.VideoAuthorImage=''
-                that.formItem2.VideoAuthorName=''
-                that.formItem2.VideoComments=''
-                that.formItem2.ViewCount=''
-                that.formItem2.VideoLink=''
-                that.formItem2.VideoType=''
+                that.formInline.longitude=''
+                that.formItem2.latitude=''
+                that.formItem2.place=''
+                that.formItem2.descr=''
                 that.request(1)
               }
 

@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="layout-copy">
-        2017-2018 &copy; 图书馆管理
+        2017-2018 &copy; 2018-2019无人机视界
       </div>
       </Col>
     </Row>
